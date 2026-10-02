@@ -3,42 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <title>Sistema de Créditos</title>
+  <link rel="stylesheet" href="simulador_completo.css">
 </head>
 <body>
 
 <header>
   <h1>Sistema Básico de Créditos</h1>
-   <link rel="stylesheet" href="simulador_completo.css">
 </header>
 
 <nav>
+  <!-- Los parámetros de estas funciones ahora coinciden exactamente con los ID de abajo -->
   <button onclick="mostrarSeccion('parametros')">Parámetros</button>
   <button onclick="mostrarSeccion('clientes')">Clientes</button>
+  <button onclick="mostrarSeccion('credito')">Créditos</button>
 </nav>
 
 <section id="parametros">
   <h2>Configurar Parámetros</h2>
-<label>Tasa de interés:</label>
-<input type="number" id="tasaInteres" min="10" max="20" value="15">
-<span>%</span>
-<br>
-<button onclick="guardarTasa()">Guardar tasa</button>
-
+  
+  <label>Tasa de interés:</label>
+  <input type="number" id="tasaInteres" min="10" max="20" value="15">
+  <span>%</span>
+  
+  <br><br>
+  <button onclick="guardarTasa()">Guardar tasa</button>
   <p id="mensajeTasa"></p>
 </section>
 
 <section id="clientes">
   <h2>Registro de Clientes</h2>
 
-  <!-- Inputs con sus IDs correctos -->
   <input type="text" id="cedulaCli" placeholder="Cédula">
   <input type="text" id="nombreCli" placeholder="Nombre">
   <input type="text" id="apellidoCli" placeholder="Apellido">
   <input type="number" id="ingresosCli" placeholder="Ingresos">
   <input type="number" id="egresosCli" placeholder="Egresos">
   <br>
-  
-  <!-- Botones con sus eventos correctos (se eliminaron los duplicados) -->
+
   <button onclick="guardarCliente()">Guardar cliente</button>
   <button onclick="limpiar()">Limpiar</button>
 
@@ -58,14 +59,31 @@
   </table>
 </section>
 
-<!-- Asegúrate de llamar al archivo JS correcto -->
-<script src="simulador_completo_2.js"></script>
-<script src="utilitarios.js"></script>
-</body>
-</html>
+<section id="credito">
+  <h2>Solicitar Crédito</h2>
 
+  <input type="text" id="buscarCedulaCredito" placeholder="Cédula del cliente">
+  <button onclick="buscarClienteCredito()">Buscar cliente</button>
 
-<script src="simulador_completo.js"></script>
+  <div id="datosClienteCredito" class="card"></div>
+  <br>
+
+  <input type="number" id="montoCredito" placeholder="Monto del crédito">
+  <input type="number" id="plazoCredito" placeholder="Plazo (meses)">
+
+  <br><br>
+  <button onclick="calcularCredito()">Calcular crédito</button>
+
+  <div id="resultadoCredito"></div>
+  <br>
+
+  <button id="btnSolicitarCredito" onclick="solicitarCredito()" disabled>
+    Solicitar crédito
+  </button>
+</section>
+
+<!-- Scripts conectados con el nombre exacto de tus archivos -->
+<script src="simulador.js"></script>
 <script src="utilitarios.js"></script>
 </body>
 </html>
