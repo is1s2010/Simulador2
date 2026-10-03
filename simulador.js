@@ -1,15 +1,14 @@
+let clientes = [];
+let creditos = [];
 
-  let clientes = [];
-  let creditos = [];
+let tasaInteres = 15;
+let clienteSeleccionado = null;
+let cuotaCalculada = 0;
+let montoCalculado = 0;
+let plazoCalculado = 0;
+let creditoAprobado = false;
 
-  let tasaInteres = 15;
-  let clienteSeleccionado = null;
-  let cuotaCalculada = 0;
-  let montoCalculado = 0;
-  let plazoCalculado = 0;
-  let creditoAprobado = false;
-
-  function ocultarSecciones() {
+function ocultarSecciones() {
   let secciones = document.querySelectorAll("section");
   secciones.forEach(function(seccion) {
     seccion.classList.remove("activa");
@@ -146,37 +145,111 @@ function calcularCredito() {
     return;
   }
 
-  let monto = recuperarFloat("montoCredito");
-  let plazo = recuperarInt("plazoCredito");
+  // Modificado: Usamos las variables globales en lugar de locales (let)
+  montoCalculado = recuperarFloat("montoCredito");
+  plazoCalculado = recuperarInt("plazoCredito");
   let capacidadPago = clienteSeleccionado.ingresos - clienteSeleccionado.egresos;
-  let interesTotal = monto * (tasaInteres / 100); 
-  let totalAPagar = monto + interesTotal;
-  let cuotaMensual = totalAPagar / plazo;
+  let interesTotal = montoCalculado * (tasaInteres / 100); 
+  let totalAPagar = montoCalculado + interesTotal;
+  cuotaCalculada = totalAPagar / plazoCalculado;
+  
   let resultadoDiv = document.getElementById("resultadoCredito");
   let botonSolicitar = document.getElementById("btnSolicitarCredito");
 
-if (capacidadPago >= cuotaMensual) {
-  creditoAprobado = true;
-  
-  resultadoDiv.innerHTML = `
-    Capacidad de pago: ${capacidadPago.toFixed(2)}<br>
-    Total a pagar: ${totalAPagar.toFixed(2)}<br>
-    Cuota mensual: ${cuotaMensual.toFixed(2)}<br>
-    RESULTADO: APROBADO
-  `;
-  resultadoDiv.className = "aprobado"; 
-  botonSolicitar.disabled = false;
-  
-} else {
-  creditoAprobado = false;
-  
-  resultadoDiv.innerHTML = `
-    Capacidad de pago: ${capacidadPago.toFixed(2)}<br>
-    Total a pagar: ${totalAPagar.toFixed(2)}<br>
-    Cuota mensual: ${cuotaMensual.toFixed(2)}<br>
-    RESULTADO: RECHAZADO
-  `;
-  resultadoDiv.className = "rechazado"; 
-  botonSolicitar.disabled = true;
+  if (capacidadPago >= cuotaCalculada) {
+    creditoAprobado = true;
+    
+    resultadoDiv.innerHTML = `
+      Capacidad de pago: ${capacidadPago.toFixed(2)}<br>
+      Total a pagar: ${totalAPagar.toFixed(2)}<br>
+      Cuota mensual: ${cuotaCalculada.toFixed(2)}<br>
+      RESULTADO: APROBADO
+    `;
+    resultadoDiv.className = "aprobado"; 
+    botonSolicitar.disabled = false;
+    
+  } else {
+    creditoAprobado = false;
+    
+    resultadoDiv.innerHTML = `
+      Capacidad de pago: ${capacidadPago.toFixed(2)}<br>
+      Total a pagar: ${totalAPagar.toFixed(2)}<br>
+      Cuota mensual: ${cuotaCalculada.toFixed(2)}<br>
+      RESULTADO: RECHAZADO
+    `;
+    resultadoDiv.className = "rechazado"; 
+    botonSolicitar.disabled = true;
+  }
 }
+
+// ==========================================
+// NUEVAS FUNCIONES AÑADIDAS (TALLER PARTE 3)
+// ==========================================
+
+// PASO 2: Agregar botón "Asignar Crédito"
+function asignarCredito() {
+  if (creditoAprobado && clienteSeleccionado !== null) {
+    let credito = {
+      cedula: clienteSeleccionado.cedula,
+      nombre: clienteSeleccionado.nombre,
+      apellido: clienteSeleccionado.apellido,
+      monto: montoCalculado,
+      tasa: tasaInteres,
+      plazo: plazoCalculado,
+      cuota: cuotaCalculada
+    };
+    
+    creditos.push(credito);
+    alert("Crédito asignado exitosamente.");
+    
+    // Limpieza de campos post-asignación
+    document.getElementById("montoCredito").value = "";
+    document.getElementById("plazoCredito").value = "";
+    document.getElementById("resultadoCredito").innerHTML = "";
+    document.getElementById("resultadoCredito").className = "";
+    document.getElementById("btnSolicitarCredito").disabled = true;
+  }
+}
+
+// PASO 4: Crear función buscarCreditos
+function buscarCreditos(cedula) {
+  let creditosEncontrados = [];
+  for (let i = 0; i < creditos.length; i++) {
+    if (creditos[i].cedula === cedula) {
+      creditosEncontrados.push(creditos[i]);
+    }
+  }
+  return creditosEncontrados;
+}
+
+// PASO 5 y PASO 7: Crear función pintarCreditos (recibe arreglo y lo pinta dinámicamente)
+function pintarCreditos(listaCreditos) {
+  let contenidoTabla = "";
+  
+  for (let i = 0; i < listaCreditos.length; i++) {
+    let c = listaCreditos[i];
+    contenidoTabla += "<tr>";
+    contenidoTabla += "<td>" + c.cedula + "</td>";
+    contenidoTabla += "<td>" + c.nombre + "</td>";
+    contenidoTabla += "<td>" + c.apellido + "</td>";
+    contenidoTabla += "<td>$" + c.monto + "</td>";
+    contenidoTabla += "<td>" + c.tasa + "%</td>";
+    contenidoTabla += "<td>" + c.plazo + "</td>";
+    contenidoTabla += "<td>$" + c.cuota.toFixed(2) + "</td>";
+    contenidoTabla += "</tr>";
+  }
+  
+  document.getElementById("tablaHistorial").innerHTML = contenidoTabla;
+}
+
+// PASO 6: Crear función buscarCreditosCliente
+function buscarCreditosCliente() {
+  // 1. Tomar el valor de la cédula desde la caja de texto
+  let cedulaBusqueda = recuperaraTexto("buscarCedulaHistorial");
+  
+  // 2. Invocar la función buscarCreditos
+  let resultado = buscarCreditos(cedulaBusqueda);
+  
+  // 3. Enviar el resultado obtenido a la función pintarCreditos
+  pintarCreditos(resultado);
 }
