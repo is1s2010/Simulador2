@@ -17,7 +17,13 @@
   <button onclick="mostrarSeccion('clientes')">Clientes</button>
   <button onclick="mostrarSeccion('credito')">Créditos</button>
   <button onclick="mostrarSeccion('historial')">Créditos Registrados</button>
+  <button onclick="mostrarSeccion('miNombre')">Contacto</button>
 </nav>
+
+<section id="miNombre">
+  <h2>Creado Por:Isis</h2>
+</section>
+
 
 <section id="parametros">
   <h2>Configurar Parámetros</h2>
@@ -39,6 +45,7 @@
   <input type="text" id="apellidoCli" placeholder="Apellido">
   <input type="number" id="ingresosCli" placeholder="Ingresos">
   <input type="number" id="egresosCli" placeholder="Egresos">
+  <input type="text" id="correoCli" placeholder="Correo">
   <br>
 
   <button onclick="guardarCliente()">Guardar cliente</button>
@@ -52,6 +59,7 @@
         <th>Apellido</th>
         <th>Ingresos</th>
         <th>Egresos</th>
+        <th>Correo</th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -107,6 +115,7 @@
     </tbody>
   </table>
 </section>
+
 
 <!-- Scripts conectados con el nombre exacto de tus archivos -->
 <script src="simulador.js"></script>

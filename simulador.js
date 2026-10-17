@@ -49,6 +49,7 @@ function seleccionarCliente(cedula) {
     mostrarTextoEnCaja("apellidoCli", clienteSeleccionado.apellido);
     mostrarTextoEnCaja("ingresosCli", clienteSeleccionado.ingresos);
     mostrarTextoEnCaja("egresosCli", clienteSeleccionado.egresos);
+    mostrarTextoEnCaja("correoCli",clienteSeleccionado.correo)
     
     document.getElementById("cedulaCli").disabled = true;
   }
@@ -60,6 +61,7 @@ function limpiar() {
   mostrarTextoEnCaja("apellidoCli", "");
   mostrarTextoEnCaja("ingresosCli", "");
   mostrarTextoEnCaja("egresosCli", "");
+  mostrarTextoEnCaja("correoCli", "");
   
   clienteSeleccionado = null; 
   
@@ -72,6 +74,7 @@ function guardarCliente() {
   let apellido = recuperaraTexto("apellidoCli");
   let ingresos = recuperarFloat("ingresosCli");
   let egresos = recuperarFloat("egresosCli");
+  let correo = recuperaraTexto("correoCli");
   
   let clienteExistente = buscarCliente(cedula);
   
@@ -80,13 +83,15 @@ function guardarCliente() {
     clienteExistente.apellido = apellido;
     clienteExistente.ingresos = ingresos;
     clienteExistente.egresos = egresos;
+    clienteExistente.correo = correo;
   } else {
     let nuevoCliente = {
       cedula: cedula,
       nombre: nombre,
       apellido: apellido,
       ingresos: ingresos,
-      egresos: egresos
+      egresos: egresos,
+      correo: correo
     };
     clientes.push(nuevoCliente);
   }
@@ -106,6 +111,7 @@ function pintarClientes() {
     contenidoTabla += "<td>" + c.apellido + "</td>";
     contenidoTabla += "<td>" + c.ingresos + "</td>";
     contenidoTabla += "<td>" + c.egresos + "</td>";
+    contenidoTabla += "<td>" + c.correo + "</td>";
     
     contenidoTabla += `<td>
       <button onclick="seleccionarCliente('` + c.cedula + `')">Actualizar</button>
